@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap Swap - অ্যাড দেখে আয় করো</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script> <!-- Telegram Mini App API -->
+    
+    <!-- Monetag SDK - তোমার দেওয়া কোড -->
+    <script src='//libtl.com/sdk.js' data-zone='10542570' data-sdk='show_10542570'></script>
+    
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #0f0f1a; 
+            color: white; 
+            text-align: center; 
+            padding: 40px; 
+            margin: 0; 
+        }
+        h1 { color: #00ff88; }
+        #timer { font-size: 80px; color: #ffcc00; margin: 30px 0; }
+        button { 
+            background: #00cc66; 
+            color: white; 
+            border: none; 
+            padding: 15px 40px; 
+            font-size: 20px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            margin-top: 30px; 
+        }
+        button:hover { background: #00b359; }
+    </style>
+</head>
+<body>
+    <h1>🎯 Tap Swap - অ্যাড দেখে রিওয়ার্ড নাও!</h1>
+    <div id="timer">30</div>
+    <p id="status">অ্যাড দেখার জন্য প্রস্তুত হও...</p>
+    
+    <button onclick="showAdAndClaim()">▶️ অ্যাড দেখুন এবং ক্লেইম করুন</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        let timeLeft = 30;
+        const timerEl = document.getElementById('timer');
+        const statusEl = document.getElementById('status');
+
+        // Monetag অ্যাড দেখানোর ফাংশন (তোমার SDK থেকে আসা)
+        function showAdAndClaim() {
+            statusEl.textContent = "অ্যাড লোড হচ্ছে...";
+            
+            // Monetag SDK কল করো (Rewarded ad দেখানো)
+            if (typeof show_10542570 === 'function') {
+                show_10542570();  // Monetag অ্যাড দেখাবে
+            } else {
+                alert("অ্যাড লোড হয়নি। পরে আবার চেষ্টা করো।");
+            }
+
+            // ৩০ সেকেন্ড টাইমার (অ্যাড দেখার পর ক্লেইম)
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    statusEl.textContent = "✅ অ্যাড সম্পূর্ণ! রিওয়ার্ড যোগ হচ্ছে...";
+                    
+                    // Telegram বটে ক্লেইম সিগন্যাল পাঠাও
+                    const userId = tg.initDataUnsafe.user?.id || 'unknown';
+                    tg.sendData(`claim_reward:${userId}`);
+                    
+                    // Mini App ক্লোজ
+                    setTimeout(() => tg.close(), 2000);
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

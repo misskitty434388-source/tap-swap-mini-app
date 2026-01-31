@@ -2,75 +2,51 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tap Swap</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-<!-- Monetag SDK -->
-<script src='//libtl.com/sdk.js' data-zone='10542570' data-sdk='show_10542570'></script>
+<script src='//libtl.com/sdk.js'
+        data-zone='10542570'
+        data-sdk='show_10542570'></script>
 
 <style>
-body{
-    background:#0f1220;
+body {
+    background:#0f0f1a;
     color:white;
     text-align:center;
     font-family:sans-serif;
-    padding:30px;
+    padding-top:50px;
 }
-h1{color:#00ff99;}
-#timer{font-size:80px;color:#ffcc00;margin:20px;}
-button{
-    padding:15px 40px;
-    font-size:20px;
-    background:#00cc66;
-    border:none;
-    border-radius:10px;
-    color:white;
-}
+h1 {color:#00ff88;}
+#timer {font-size:70px;color:#ffcc00;}
 </style>
 </head>
 
 <body>
-
 <h1>🎯 Tap Swap</h1>
+<p>৩০ সেকেন্ড অপেক্ষা করুন</p>
 <div id="timer">30</div>
-<p id="status">অ্যাড দেখার জন্য প্রস্তুত</p>
-
-<button onclick="startAd()">▶️ অ্যাড দেখুন</button>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-let time = 30;
-let started = false;
+// 🔥 অ্যাড দেখাও
+show_10542570();
 
-function startAd(){
-    if(started) return;
-    started = true;
+// ⏳ TIMER
+let t = 30;
+let el = document.getElementById("timer");
 
-    document.getElementById("status").innerText="অ্যাড লোড হচ্ছে...";
-
-    if(typeof show_10542570 === "function"){
-        show_10542570();
+let x = setInterval(() => {
+    t--;
+    el.innerText = t;
+    if (t <= 0) {
+        clearInterval(x);
+        tg.sendData("CLAIM"); // BOT এ যাবে
+        tg.close();          // AUTO BACK
     }
-
-    const interval = setInterval(()=>{
-        time--;
-        document.getElementById("timer").innerText=time;
-
-        if(time<=0){
-            clearInterval(interval);
-            document.getElementById("status").innerText="✅ অ্যাড সম্পূর্ণ";
-
-            // 👉 BOT এ সিগন্যাল পাঠানো
-            tg.sendData("CLAIM_OK");
-        }
-    },1000);
-}
+}, 1000);
 </script>
-
 </body>
 </html>

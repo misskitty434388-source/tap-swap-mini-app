@@ -15,7 +15,7 @@
         body {
             font-family: Arial, sans-serif;
             background: #0f0f1a;
-            color: #ffffff;
+            color: #fff;
             text-align: center;
             padding: 40px;
             margin: 0;
@@ -46,14 +46,13 @@
 <body>
 
 <h2>🎯 ৩০ সেকেন্ড অ্যাড দেখো</h2>
-<p>অ্যাড সম্পূর্ণ হলে Claim বাটন আসবে</p>
+<p>টাইমার শেষ হলে Claim বাটন আসবে</p>
 
 <div id="timer">30</div>
 
 <button id="claimBtn" disabled>⏳ অপেক্ষা করো</button>
 
 <script>
-    // ===== TIMER =====
     let timeLeft = 30;
     const timerEl = document.getElementById("timer");
     const btn = document.getElementById("claimBtn");
@@ -69,9 +68,8 @@
         }
     }, 1000);
 
-    // ===== CLAIM BUTTON =====
     btn.onclick = () => {
-        // এখানে নিজের bot username বসাবে
+        // নিজের bot username এখানে বসাবে
         window.location.href =
             "https://t.me/earn_now_247_bot?start=claim";
     };

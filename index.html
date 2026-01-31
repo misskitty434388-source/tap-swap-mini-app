@@ -1,78 +1,75 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watch Ad</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap Swap</title>
 
-    <!-- Monetag SDK -->
-    <script src='//libtl.com/sdk.js'
-            data-zone='10542570'
-            data-sdk='show_10542570'>
-    </script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #0f0f1a;
-            color: #fff;
-            text-align: center;
-            padding: 40px;
-            margin: 0;
-        }
-        h2 { color: #00ff88; }
-        #timer {
-            font-size: 70px;
-            color: #ffcc00;
-            margin: 30px 0;
-        }
-        button {
-            background: #00cc66;
-            color: #fff;
-            border: none;
-            padding: 15px 35px;
-            font-size: 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 25px;
-        }
-        button:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
-    </style>
+<!-- Monetag SDK -->
+<script src='//libtl.com/sdk.js' data-zone='10542570' data-sdk='show_10542570'></script>
+
+<style>
+body{
+    background:#0f1220;
+    color:white;
+    text-align:center;
+    font-family:sans-serif;
+    padding:30px;
+}
+h1{color:#00ff99;}
+#timer{font-size:80px;color:#ffcc00;margin:20px;}
+button{
+    padding:15px 40px;
+    font-size:20px;
+    background:#00cc66;
+    border:none;
+    border-radius:10px;
+    color:white;
+}
+</style>
 </head>
 
 <body>
 
-<h2>🎯 ৩০ সেকেন্ড অ্যাড দেখো</h2>
-<p>টাইমার শেষ হলে Claim বাটন আসবে</p>
-
+<h1>🎯 Tap Swap</h1>
 <div id="timer">30</div>
+<p id="status">অ্যাড দেখার জন্য প্রস্তুত</p>
 
-<button id="claimBtn" disabled>⏳ অপেক্ষা করো</button>
+<button onclick="startAd()">▶️ অ্যাড দেখুন</button>
 
 <script>
-    let timeLeft = 30;
-    const timerEl = document.getElementById("timer");
-    const btn = document.getElementById("claimBtn");
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
 
-    const countdown = setInterval(() => {
-        timeLeft--;
-        timerEl.innerText = timeLeft;
+let time = 30;
+let started = false;
 
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            btn.disabled = false;
-            btn.innerText = "✅ Claim Reward";
+function startAd(){
+    if(started) return;
+    started = true;
+
+    document.getElementById("status").innerText="অ্যাড লোড হচ্ছে...";
+
+    if(typeof show_10542570 === "function"){
+        show_10542570();
+    }
+
+    const interval = setInterval(()=>{
+        time--;
+        document.getElementById("timer").innerText=time;
+
+        if(time<=0){
+            clearInterval(interval);
+            document.getElementById("status").innerText="✅ অ্যাড সম্পূর্ণ";
+
+            // 👉 BOT এ সিগন্যাল পাঠানো
+            tg.sendData("CLAIM_OK");
         }
-    }, 1000);
-
-    btn.onclick = () => {
-        // নিজের bot username এখানে বসাবে
-        window.location.href =
-            "https://t.me/earn_now_247_bot?start=claim";
-    };
+    },1000);
+}
 </script>
 
 </body>
